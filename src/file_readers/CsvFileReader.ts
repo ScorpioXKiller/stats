@@ -1,18 +1,15 @@
 import fs from 'fs';
 
-abstract class CsvFileReader<T> {
+class CsvFileReader {
   constructor(public filePath: string) {}
 
-  protected abstract mapRow(row: string[]): T;
-
-  public parseData(): T[] {
+  public read(): string[][] {
     return fs
       .readFileSync(this.filePath, {
         encoding: 'utf-8',
       })
       .split('\n')
-      .map((row: string): string[] => row.split(','))
-      .map(this.mapRow); // parcing;
+      .map((row: string): string[] => row.split(',')); // parcing;
   }
 }
 

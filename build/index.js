@@ -4,16 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
-const MatchReader_1 = __importDefault(require("./MatchReader"));
-const MatchResult_1 = __importDefault(require("./MatchResult"));
+const WinsAnalysis_1 = __importDefault(require("./analyzers/WinsAnalysis"));
+const CsvFileReader_1 = __importDefault(require("./file_readers/CsvFileReader"));
+const MatchReader_1 = __importDefault(require("./file_readers/MatchReader"));
+const ConsoleReport_1 = __importDefault(require("./reports/ConsoleReport"));
+const Summary_1 = __importDefault(require("./Summary"));
 const filePath = path_1.default.join(__dirname, '..', 'football.csv');
-const matchReader = new MatchReader_1.default(filePath);
-const matches = matchReader.parseData();
-let manUnitedWins = 0;
-for (const match of matches) {
-    if ((match[1] === 'Man United' && match[5] === MatchResult_1.default.HomeWin) ||
-        (match[2] === 'Man United' && match[5] === MatchResult_1.default.AwayWin)) {
-        manUnitedWins++;
-    }
-}
-console.log(`Man United won ${manUnitedWins} times.`);
+const filePathToWrite = path_1.default.join(__dirname, '..', 'public', 'index.html');
+const matchReader = new MatchReader_1.default(new CsvFileReader_1.default(filePath));
+const matches = matchReader.loadMatches();
+const manUnitedWins = new Summary_1.default(new WinsAnalysis_1.default('Man United'), new ConsoleReport_1.default());
+manUnitedWins.buildAndPrintReport(matches);
+const liverpoolWins = Summary_1.default.winsAnalysisWithHtmlReport('Liverpool', filePathToWrite);
+liverpoolWins.buildAndPrintReport(matches);
+const liverpoolWins1 = Summary_1.default.winsAnalysisWithConsoleReport('Liverpool');
+liverpoolWins1.buildAndPrintReport(matches);
+const arsenalWins = Summary_1.default.winsAnalysisWithConsoleReport("Arsenal");
+arsenalWins.buildAndPrintReport(matches);

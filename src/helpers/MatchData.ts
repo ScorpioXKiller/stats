@@ -1,4 +1,4 @@
-import MatchResult from './MatchResult';
+import MatchResults from './MatchResults';
 
 type MatchData = [
   date: Date,
@@ -6,7 +6,7 @@ type MatchData = [
   away: string,
   homeGoals: number,
   awayGoals: number,
-  winner: MatchResult,
+  winner: MatchResults,
   reffery: string
 ];
 
